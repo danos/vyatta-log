@@ -1,0 +1,2 @@
+templates opt/vyatta/share/vyatta-op
+yang/vyatta-op-show-log-v1.yang usr/share/configd/yang

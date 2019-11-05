@@ -1,0 +1,45 @@
+Source: vyatta-log
+Section: contrib/net
+Priority: optional
+Maintainer: Vyatta Package Maintainers <DL-vyatta-help@att.com>
+Build-Depends:
+ debhelper (>= 9.0.0),
+ dh-yang
+Standards-Version: 3.9.8
+
+Package: vyatta-log-journald-config
+Architecture: all
+Depends: ${misc:Depends}
+Pre-Depends: systemd
+Description: Vyatta logging service
+ Vyatta logging service, provide ability to view system logs
+
+Package: vyatta-op-show-log-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: Vyatta show log yang
+ Yang modules to show system logs
+
+Package: vyatta-op-show-log-auth-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: Vyatta show log auth yang
+ Yang module to show authentication logs
+
+Package: vyatta-op-monitor-log-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: Vyatta monitor log yang
+ Yang module to monitor system logs
+
+Package: vyatta-op-show-log-file-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, vyatta-system
+Description: OBSOLETE vyatta show log file yang
+ Legacy yang for syslog based logging
+
+Package: vyatta-op-delete-log-file-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, vyatta-system
+Description: OBSOLETE vyatta delete log file yang
+ Legacy yang for syslog based logging
