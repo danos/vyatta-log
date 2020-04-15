@@ -23,6 +23,12 @@ Description: YANG root for systemd-journal config in Vyatta vRouter
  configuration in the Vyatta Configd CLI, and the export child-node hosting
  journal log export configuration.
 
+Package: vyatta-op-clear-log-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: Vyatta clear log yang
+ Yang modules to clear system logs
+
 Package: vyatta-op-show-log-v1-yang
 Architecture: all
 Depends: ${misc:Depends}, ${yang:Depends}, systemd
