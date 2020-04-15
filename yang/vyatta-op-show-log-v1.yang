@@ -16,11 +16,11 @@ module vyatta-op-show-log-v1 {
 	contact
 		"AT&T
 		 Postal: 208 S. Akard Street
-		         Dallas, TX 25202
+		         Dallas, TX 75202
 		 Web: www.att.com";
 
 	description
-		"Copyright (c) 2017-2019 AT&T Intellectual Property
+		"Copyright (c) 2017-2020 AT&T Intellectual Property
 		All rights reserved.
 
 		Redistribution and use in source and binary forms, with or without
@@ -54,6 +54,10 @@ module vyatta-op-show-log-v1 {
 
 		Defines the top 'log' level under 'show' for  operational CLI";
 
+	revision 2020-04-13 {
+		description "Add time filtering options";
+	}
+
 	revision 2019-06-26 {
 		description "Add level filtering option";
 	}
@@ -65,6 +69,16 @@ module vyatta-op-show-log-v1 {
 	revision 2017-09-14 {
 		description "Initial version";
 	}
+
+	typedef systemd-timestamp {
+		type string {
+			opd:help "Timestamp messages are compared with";
+			opd:pattern-help '<timestamp>';
+		}
+		description "A timestamp as defined by systemd.time(7)";
+		reference "https://www.freedesktop.org/software/systemd/man/systemd.time.html";
+	}
+
 
 	opd:augment /show:show {
 		opd:command log {
@@ -94,6 +108,60 @@ module vyatta-op-show-log-v1 {
 				opd:on-enter "journalctl -a --no-pager --priority $4";
 
 				type syslog:level;
+
+				opd:option since {
+					opd:help "Show messages newer than";
+					opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be newer than";
+					}
+
+					opd:option until {
+						opd:help "Show messages older than";
+						opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\" --until \"$8\"";
+
+						type systemd-timestamp {
+							opd:help "Timestamp messages should be older than";
+						}
+					}
+				}
+
+				opd:option until {
+					opd:help "Show messages older than";
+					opd:on-enter "journalctl -a --no-pager --priority $4 --until \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be older than";
+					}
+				}
+			}
+
+			opd:option since {
+				opd:help "Show messages newer than";
+				opd:on-enter "journalctl -a --no-pager --since \"$4\"";
+
+				type systemd-timestamp {
+					opd:help "Timestamp messages should be newer than";
+				}
+
+				opd:option until {
+					opd:help "Show messages older than";
+					opd:on-enter "journalctl -a --no-pager --since \"$4\" --until \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be older than";
+					}
+				}
+			}
+
+			opd:option until {
+				opd:help "Show messages older than";
+				opd:on-enter "journalctl -a --no-pager --until \"$4\"";
+
+				type systemd-timestamp {
+					opd:help "Timestamp messages should be older than";
+				}
 			}
 		}
 	}
