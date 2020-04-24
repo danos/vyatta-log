@@ -1,0 +1,191 @@
+module vyatta-op-show-journal-v1 {
+	namespace "urn:vyatta.com:mgmt:vyatta-op-show-journal:1";
+	prefix vyatta-op-show-journal-v1;
+
+	import vyatta-opd-extensions-v1 {
+		prefix opd;
+	}
+	import vyatta-op-show-v1 {
+		prefix show;
+	}
+
+	organization "AT&T Inc.";
+	contact
+		"AT&T
+		 Postal: 208 S. Akard Street
+			 Dallas, TX 75202
+		 Web: www.att.com";
+
+	description
+		"Copyright (c) 2020 AT&T Intellectual Property
+		All rights reserved.
+
+		Redistribution and use in source and binary forms, with or without
+		modification, are permitted provided that the following conditions
+		are met:
+
+		1. Redistributions of source code must retain the above copyright
+		   notice, this list of conditions and the following disclaimer.
+		2. Redistributions in binary form must reproduce the above
+		   copyright notice, this list of conditions and the following
+		   disclaimer in the documentation and/or other materials provided
+		   with the distribution.
+		3. Neither the name of the copyright holder nor the names of its
+		   contributors may be used to endorse or promote products derived
+		   from this software without specific prior written permission.
+
+		THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+		'AS IS' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+		LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+		FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+		COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+		INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+		BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+		LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+		CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+		LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+		ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+		POSSIBILITY OF SUCH DAMAGE.
+
+		SPDX-License-Identifier: BSD-3-Clause
+
+		Defines the top 'journal' level under 'show' for  operational CLI";
+
+	revision 2020-04-23 {
+		description "Initial version";
+	}
+
+	typedef systemd-timestamp {
+		type string {
+			opd:help "Timestamp messages are compared with";
+			opd:pattern-help '<timestamp>';
+			pattern '[ 0-9a-zA-Z./:-]+';
+		}
+		description "A timestamp as defined by systemd.time(7)";
+		reference "https://www.freedesktop.org/software/systemd/man/systemd.time.html";
+	}
+
+	typedef priority-level {
+		type union {
+			type uint8 {
+				range 0..7;
+			}
+			type enumeration {
+				enum "emerg" {
+					opd:help "Emergency";
+					description "Emergency";
+				}
+				enum "alert" {
+ 					opd:help "Alert";
+					description "Alert";
+				}
+				enum "crit" {
+					opd:help "Critical";
+					description "Critical";
+				}
+				enum "err" {
+					opd:help "Error";
+					description "Error";
+				}
+				enum "warning" {
+					opd:help "Warning";
+					description "Warning";
+				}
+				enum "notice" {
+					opd:help "Notice";
+					description "Notice";
+				}
+				enum "info" {
+					opd:help "Informational";
+					description "Informational";
+				}
+				enum "debug" {
+					opd:help "Debug";
+					description "Debug";
+				}
+			}
+		}
+		description "Numeric or textual priority level";
+		reference "https://tools.ietf.org/html/rfc5424#section-6.2.1";
+	}
+
+	opd:augment /show:show {
+		opd:command journal {
+			opd:help "Show system journal";
+			opd:on-enter "journalctl -a --no-pager";
+
+			opd:command tail {
+				opd:help "Show the most recent messages in the system journal";
+				opd:inherit "" {
+					opd:on-enter "journalctl -n $4";
+				}
+
+				opd:argument number {
+					opd:help "number of messages to show";
+					type uint32;
+				}
+			}
+
+			opd:option level {
+				opd:help "Priority level";
+				opd:on-enter "journalctl -a --no-pager --priority $4";
+
+				type priority-level;
+
+				opd:option since {
+					opd:help "Show messages newer than";
+					opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be newer than";
+					}
+
+					opd:option until {
+						opd:help "Show messages older than";
+						opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\" --until \"$8\"";
+
+						type systemd-timestamp {
+							opd:help "Timestamp messages should be older than";
+						}
+					}
+				}
+
+				opd:option until {
+					opd:help "Show messages older than";
+					opd:on-enter "journalctl -a --no-pager --priority $4 --until \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be older than";
+					}
+				}
+			}
+
+			opd:option since {
+				opd:help "Show messages newer than";
+				opd:on-enter "journalctl -a --no-pager --since \"$4\"";
+
+				type systemd-timestamp {
+					opd:help "Timestamp messages should be newer than";
+				}
+
+				opd:option until {
+					opd:help "Show messages older than";
+					opd:on-enter "journalctl -a --no-pager --since \"$4\" --until \"$6\"";
+
+					type systemd-timestamp {
+						opd:help "Timestamp messages should be older than";
+					}
+				}
+			}
+
+			opd:option until {
+				opd:help "Show messages older than";
+				opd:on-enter "journalctl -a --no-pager --until \"$4\"";
+
+				type systemd-timestamp {
+					opd:help "Timestamp messages should be older than";
+				}
+			}
+		}
+	}
+}

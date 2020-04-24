@@ -29,6 +29,12 @@ Depends: ${misc:Depends}, ${yang:Depends}, systemd
 Description: Vyatta clear log yang
  Yang modules to clear system logs
 
+Package: vyatta-op-show-journal-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: Vyatta show journal yang
+ Yang modules to show system journal
+
 Package: vyatta-op-show-log-v1-yang
 Architecture: all
 Depends: ${misc:Depends}, ${yang:Depends}, systemd
