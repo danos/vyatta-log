@@ -1,1 +1,2 @@
 10-vyatta-log.conf usr/lib/systemd/journald.conf.d
+vyatta-systemd-journald-snmptrap.conf /usr/lib/systemd/system/systemd-journald.service.d

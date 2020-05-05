@@ -1,0 +1,2 @@
+yang/vyatta-system-journal-v1.yang /usr/share/configd/yang
+scripts/vyatta_update_journal.pl /opt/vyatta/sbin

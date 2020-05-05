@@ -9,10 +9,19 @@ Standards-Version: 3.9.8
 
 Package: vyatta-log-journald-config
 Architecture: all
-Depends: ${misc:Depends}
+Depends: vyatta-service-snmp (>= 0.40),
+ ${misc:Depends}
 Pre-Depends: systemd
 Description: Vyatta logging service
  Vyatta logging service, provide ability to view system logs
+
+Package: vyatta-system-journal-v1-yang
+Architecture: all
+Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Description: YANG root for systemd-journal config in Vyatta vRouter
+ The YANG files defining the root of the data model for systemd-journal's
+ configuration in the Vyatta Configd CLI, and the export child-node hosting
+ journal log export configuration.
 
 Package: vyatta-op-show-log-v1-yang
 Architecture: all
