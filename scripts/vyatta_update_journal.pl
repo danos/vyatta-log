@@ -29,9 +29,13 @@ my $JOURNALD_TMPL = "/tmp/journald.conf.XXXXXX";
 sub get_rate_limit_parms {
     my ($config) = @_;
 
-    if ( defined($config->{'rate-limit'}) ) {
-	$rl_interval = $config->{'rate-limit'}->{'interval'} . "s";
-	$rl_burst    = $config->{'rate-limit'}->{'burst'};
+    if ( defined( $config->{'rate-limit'} ) ) {
+        $rl_interval = $config->{'rate-limit'}->{'interval'} . "s";
+        $rl_burst    = $config->{'rate-limit'}->{'burst'};
+    }
+    else {
+        $rl_interval = 0;
+        $rl_burst    = 0;
     }
 }
 
