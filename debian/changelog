@@ -1,3 +1,9 @@
+vyatta-log (3) unstable; urgency=medium
+
+  * Move journal related scripts/yang here from vyatta-cfg-system
+
+ -- Nicholas Brown <nick.brown@att.com>  Wed, 06 May 2020 11:06:44 +0100
+
 vyatta-log (2) unstable; urgency=medium
 
   * DANOS Import master
