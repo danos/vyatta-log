@@ -11,6 +11,9 @@ module vyatta-op-show-log-v1 {
 	import vyatta-system-syslog-v1 {
 		prefix syslog;
 	}
+        import ietf-yang-types {
+		prefix ietf;
+	}
 
 	organization "AT&T Inc.";
 	contact
@@ -70,16 +73,6 @@ module vyatta-op-show-log-v1 {
 		description "Initial version";
 	}
 
-	typedef systemd-timestamp {
-		type string {
-			opd:help "Timestamp messages are compared with";
-			opd:pattern-help '<timestamp>';
-		}
-		description "A timestamp as defined by systemd.time(7)";
-		reference "https://www.freedesktop.org/software/systemd/man/systemd.time.html";
-	}
-
-
 	opd:augment /show:show {
 		opd:command log {
 			opd:help "Show system log";
@@ -111,56 +104,62 @@ module vyatta-op-show-log-v1 {
 
 				opd:option since {
 					opd:help "Show messages newer than";
-					opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\"";
+					opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --priority $4 --since \"$6\"";
 
-					type systemd-timestamp {
+					type ietf:date-and-time {
 						opd:help "Timestamp messages should be newer than";
+						opd:pattern-help '<ietf rfc3339 timestamp>';
 					}
 
 					opd:option until {
 						opd:help "Show messages older than";
-						opd:on-enter "journalctl -a --no-pager --priority $4 --since \"$6\" --until \"$8\"";
+						opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --priority $4 --since \"$6\" --until \"$8\"";
 
-						type systemd-timestamp {
+						type ietf:date-and-time {
 							opd:help "Timestamp messages should be older than";
+							opd:pattern-help '<ietf rfc3339 timestamp>';
 						}
 					}
 				}
 
 				opd:option until {
 					opd:help "Show messages older than";
-					opd:on-enter "journalctl -a --no-pager --priority $4 --until \"$6\"";
+					opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --priority $4 --until \"$6\"";
 
-					type systemd-timestamp {
+					type ietf:date-and-time {
 						opd:help "Timestamp messages should be older than";
+						opd:pattern-help '<ietf rfc3339 timestamp>';
 					}
 				}
 			}
 
 			opd:option since {
 				opd:help "Show messages newer than";
-				opd:on-enter "journalctl -a --no-pager --since \"$4\"";
+				opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --since \"$4\"";
 
-				type systemd-timestamp {
+				type ietf:date-and-time {
 					opd:help "Timestamp messages should be newer than";
+					opd:pattern-help '<ietf rfc3339 timestamp>';
 				}
 
 				opd:option until {
 					opd:help "Show messages older than";
-					opd:on-enter "journalctl -a --no-pager --since \"$4\" --until \"$6\"";
+					opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --since \"$4\" --until \"$6\"";
 
-					type systemd-timestamp {
+					type ietf:date-and-time {
 						opd:help "Timestamp messages should be older than";
+						opd:pattern-help '<ietf rfc3339 timestamp>';
 					}
 				}
 			}
 
 			opd:option until {
 				opd:help "Show messages older than";
-				opd:on-enter "journalctl -a --no-pager --until \"$4\"";
+				opd:on-enter "vyatta-journalctl-wrapper-rfc3339-to-systemd-time -a --no-pager --until \"$4\"";
 
-				type systemd-timestamp {
+				type ietf:date-and-time {
 					opd:help "Timestamp messages should be older than";
+					opd:pattern-help '<ietf rfc3339 timestamp>';
 				}
 			}
 		}

@@ -49,7 +49,8 @@ Description: Vyatta show journal yang
 
 Package: vyatta-op-show-log-v1-yang
 Architecture: all
-Depends: ${misc:Depends}, ${yang:Depends}, systemd
+Depends: ${misc:Depends}, ${yang:Depends}, systemd,
+ python3-rfc3339-to-systemd-time
 Description: Vyatta show log yang
  Yang modules to show system logs
 
