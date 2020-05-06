@@ -4,5 +4,7 @@
 # Uncomment this to turn on verbose mode.
 # export DH_VERBOSE=1
 
+export PYBUILD_NAME=rfc3339_to_systemd_time
+
 %:
-	dh $@ --with=yang
+	dh $@ --with=yang,python3 --buildsystem=pybuild
