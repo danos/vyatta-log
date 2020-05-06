@@ -2,7 +2,7 @@
 
 # **** License ****
 #
-# Copyright (c) 2018-2019 AT&T Intellectual Property.
+# Copyright (c) 2018-2020 AT&T Intellectual Property.
 #    All Rights Reserved.
 #
 # SPDX-License-Identifier: GPL-2.0-only
@@ -18,8 +18,12 @@ use Vyatta::Config::Parse;
 
 my $rl_interval;
 my $rl_burst;
+my $storage_size;
 
-my $JOURNALD_CONF = '/etc/systemd/journald.conf.d/10-vyatta-rate-limit.conf';
+my $JOURNALD_RATE_LIMIT_CONF =
+  '/etc/systemd/journald.conf.d/10-vyatta-rate-limit.conf';
+my $JOURNALD_STORAGE_CONF =
+  '/etc/systemd/journald.conf.d/10-vyatta-storage.conf';
 my $JOURNALD_TMPL = "/tmp/journald.conf.XXXXXX";
 
 sub get_rate_limit_parms {
@@ -28,6 +32,14 @@ sub get_rate_limit_parms {
     if ( defined($config->{'rate-limit'}) ) {
 	$rl_interval = $config->{'rate-limit'}->{'interval'} . "s";
 	$rl_burst    = $config->{'rate-limit'}->{'burst'};
+    }
+}
+
+sub get_storage_parms {
+    my ($config) = @_;
+
+    if ( defined( $config->{'storage'} ) ) {
+        $storage_size = $config->{'storage'}->{'size'};
     }
 }
 
@@ -46,6 +58,17 @@ END
     }
 }
 
+sub print_storage_settings {
+    my ($out) = @_;
+
+    if ( defined($storage_size) ) {
+        print $out <<"END";
+[Journal]
+SystemMaxUse=$storage_size
+END
+    }
+}
+
 #
 # Write out the actual journal configuration file. This file is
 # created as a temp file. This function returns 0 if the created
@@ -53,12 +76,12 @@ END
 # the existing file if it is different and returns 1.
 #
 sub write_journald_config_file {
-    my ($config_file) = @_;
+    my ( $config_file, $print_func_ref ) = @_;
 
     my ( $out, $tempname ) = tempfile( $JOURNALD_TMPL, UNLINK => 1 )
       or die "Can't create temp file: $!";
 
-    print_rate_limit_settings($out);
+    $print_func_ref->($out);
 
     close $out
       or die "Can't output $tempname: $!";
@@ -84,9 +107,13 @@ sub create_journald_config {
     $config = $config->{'journal'};
 
     get_rate_limit_parms($config);
-    my $ret = write_journald_config_file($JOURNALD_CONF);
+    get_storage_parms($config);
+    my $ret_rate = write_journald_config_file( $JOURNALD_RATE_LIMIT_CONF,
+        \&print_rate_limit_settings );
+    my $ret_storage = write_journald_config_file( $JOURNALD_STORAGE_CONF,
+        \&print_storage_settings );
     system("service systemd-journald restart")
-      if ( $ret == 1 );
+      if ( $ret_rate == 1 || $ret_storage == 1 );
 
 }
 
