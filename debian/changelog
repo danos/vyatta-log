@@ -1,3 +1,19 @@
+vyatta-log (4) unstable; urgency=medium
+
+  * Allow the amount of storage use for the system logs to be configured
+    (Fixes: VRVDR-49266)
+  * Configure journal rate-limiting to 0 when no user config
+    (Fixes: VRVDR-48477)
+  * New 'clear log' op yang to clear system log (Fixes: VRVDR-50701)
+  * Add 'show journal' operational yang
+  * Add a .gitignore file
+  * Add a rfc3339_to_systemd_time python module
+  * Add 'since' and 'until' options to 'show log' (Fixes: VRVDR-32201)
+  * Use rfc3339 timestamps for 'show log' since and until options
+  * Fix lintian warnings
+
+ -- Nicholas Brown <nick.brown@att.com>  Tue, 12 May 2020 10:36:42 +0100
+
 vyatta-log (3) unstable; urgency=medium
 
   * Move journal related scripts/yang here from vyatta-cfg-system
