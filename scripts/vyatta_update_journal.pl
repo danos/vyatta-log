@@ -56,7 +56,7 @@ sub print_rate_limit_settings {
     if ( defined($rl_interval) ) {
         print $out <<"END";
 [Journal]
-RateLimitInterval=$rl_interval
+RateLimitIntervalSec=$rl_interval
 RateLimitBurst=$rl_burst
 END
     }
