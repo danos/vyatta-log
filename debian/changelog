@@ -1,3 +1,12 @@
+vyatta-log (5) unstable; urgency=medium
+
+  * Add a 'show log audit' command
+  * Mask the journal audit socket (Closes: VRVDR-51098)
+  * Use RateLimitIntervalSec in journal config (Closes: VRVDR-51043)
+  * 'show log audit' requires auditd which generates the file.
+
+ -- Nicholas Brown <nick.brown@att.com>  Fri, 15 May 2020 09:56:01 +0100
+
 vyatta-log (4) unstable; urgency=medium
 
   * Allow the amount of storage use for the system logs to be configured
