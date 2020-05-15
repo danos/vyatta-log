@@ -1,0 +1,10 @@
+#! /bin/bash
+#
+# Copyright (c) 2018-2020, AT&T Intellectual Property.
+#
+# SPDX-License-Identifier: GPL-2.0-only
+
+source "$(cd "$(dirname "${0}")" && pwd -P)"/../tech-support.functions
+
+header AUDIT LOG
+do_cmd run show log audit | tail -n 500
