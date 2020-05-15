@@ -56,7 +56,7 @@ Description: Vyatta show log yang
 
 Package: vyatta-op-show-log-audit-v1-yang
 Architecture: all
-Depends: ${misc:Depends}, ${yang:Depends}, vyatta-system
+Depends: ${misc:Depends}, ${yang:Depends}, auditd, vyatta-system
 Description: Vyatta show log audit yang
  Yang module to show audit logs
 
