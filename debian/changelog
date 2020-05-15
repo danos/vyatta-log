@@ -1,3 +1,9 @@
+vyatta-log (6) unstable; urgency=medium
+
+  * Add a tech-support script to show audit logs (Closes: VRVDR-51157)
+
+ -- Nicholas Brown <nick.brown@att.com>  Fri, 15 May 2020 17:14:57 +0100
+
 vyatta-log (5) unstable; urgency=medium
 
   * Add a 'show log audit' command
