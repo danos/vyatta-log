@@ -59,7 +59,7 @@ module vyatta-system-journal-v1 {
          Root configuration node for all options related to the
          configuration of systemd-journal via the Vyatta Configuration CLI.";
 
-    revision 2020-04-15 {
+    revision 2020-05-19 {
         description "Add storage size configuration";
     }
 
@@ -109,6 +109,8 @@ module vyatta-system-journal-v1 {
 
     grouping journal-storage {
         container storage {
+            configd:help "Configure journal storage";
+            description "Configure journal storage";
             leaf size {
                 type string {
                     configd:help "Maximum amount of journal storage";
@@ -118,6 +120,7 @@ module vyatta-system-journal-v1 {
                 default "4G";
                 description "Specifies the maximum amount of file-system space
                              that may be used for storing journal messages";
+                configd:help "Maximum amount of file-system space for journal storage";
             }
             configd:end "vyatta_update_journal.pl";
         }
