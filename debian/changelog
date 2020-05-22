@@ -1,3 +1,9 @@
+vyatta-log (7) unstable; urgency=medium
+
+  * Add some minor missing help text (Closes: VRVDR-51158)
+
+ -- Nicholas Brown <nick.brown@att.com>  Fri, 22 May 2020 12:22:17 +0100
+
 vyatta-log (6) unstable; urgency=medium
 
   * Add a tech-support script to show audit logs (Closes: VRVDR-51157)
