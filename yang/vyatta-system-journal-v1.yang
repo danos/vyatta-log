@@ -59,6 +59,10 @@ module vyatta-system-journal-v1 {
          Root configuration node for all options related to the
          configuration of systemd-journal via the Vyatta Configuration CLI.";
 
+	revision 2021-03-11 {
+		description "Replace default static journal max size";
+	}
+
     revision 2020-05-19 {
         description "Add storage size configuration";
     }
@@ -112,14 +116,25 @@ module vyatta-system-journal-v1 {
             configd:help "Configure journal storage";
             description "Configure journal storage";
             leaf size {
-                type string {
-                    configd:help "Maximum amount of journal storage";
-                    pattern '[1-9][0-9]*[KMGT]?';
-                    configd:pattern-help "<num>[suffix(K,M,G,T) Bytes otherwise]";
+                type union {
+                    type string {
+                        configd:help "Maximum amount of journal storage";
+                        pattern '[1-9][0-9]*[KMGT]?';
+                        configd:pattern-help "<num>[suffix(K,M,G,T) Bytes otherwise]";
+                    }
+                    type string {
+                        pattern 'auto';
+                        configd:help "Allow the system to detemine the best size for the journal";
+                        configd:pattern-help "auto";
+                    }
                 }
-                default "4G";
+                default "auto";
                 description "Specifies the maximum amount of file-system space
-                             that may be used for storing journal messages";
+                             that may be used for storing journal messages.
+                             The system will determine the best value for the journal's
+                             maximum size, currently it uses 10% of the log partition up to 4GB.
+                             This may change in the future.
+                             Using the default means that this behavior is acceptable.";
                 configd:help "Maximum amount of file-system space for journal storage";
             }
             configd:end "vyatta_update_journal.pl";

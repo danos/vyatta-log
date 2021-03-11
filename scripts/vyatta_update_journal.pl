@@ -42,7 +42,12 @@ sub get_rate_limit_parms {
 sub get_storage_parms {
     my ($config) = @_;
 
-    if ( defined( $config->{'storage'} ) ) {
+    #
+    # special 'auto' value means journald built-in default
+    # heuristic behaviour when not explictly configured.
+    #
+    if ( defined( $config->{'storage'} ) &&
+         ($config->{'storage'}->{'size'} ne 'auto') ) {
         $storage_size = $config->{'storage'}->{'size'};
     }
 }
