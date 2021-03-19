@@ -1,3 +1,9 @@
+vyatta-log (8) unstable; urgency=medium
+
+  * Replace modelled default static journal max size
+
+ -- Nicholas Brown <nick.brown@att.com>  Fri, 19 Mar 2021 13:35:54 +0000
+
 vyatta-log (7) unstable; urgency=medium
 
   * Add some minor missing help text (Closes: VRVDR-51158)
